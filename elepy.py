@@ -3,8 +3,8 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 
-x = np.arange(10,19.5,0.1)
-e = [math.sin(i) for i in x]
+x = np.arange(0,20,0.1)
+e = [np.sin(i) for i in x]
 
 
 
@@ -12,19 +12,21 @@ def calc_RL(r,l,d):
     pass
 
 def calc_RC(r,c,q):
+    # 抵抗とコンデンサの積が0 よりも小さすぎると電流がマイナスに発散することがある
     i=[0 for i in x]
     vq=[0 for i in x]
     qt=q
     for j, ele in enumerate(e):
-        i[j]=(ele-qt)/c/r
-        
+        i[j]=(ele/r) - (qt/(r*c))
+        print(f'i : {i[j]}  {ele/r}  , {qt/(r*c)}')
         vq[j]=qt/c
         before_q=qt
         qt+=i[j]
-
-        if abs(before_q)<abs(ele) and abs(qt)>abs(ele):
+        qi=qt
+        print(f'q : {before_q} , {ele*c} , {qt}')
+        if abs(before_q)<=abs(ele*c) and abs(qt)>abs(ele*c):     #今フレームでは貯められた電荷量が 電圧*静電容量を超えてない　かつ　次のフレームではそれを超える　とき
             qt=ele*c
-           # print(str(j*0.1) +'s  ele*c = '+str(vq[j]))
+            #print(f'{j*0.1}sec ,qt = {qt} , before_q = {before_q} , qt = {qi} , ele = {ele}')
     
     fig,ax1 = plt.subplots()
 
@@ -44,9 +46,7 @@ def calc_RLC():
     pass
 
 if __name__=='__main__':
-    calc_RC(10,0.1,0)
-
-
+    calc_RC(1,1,0)
 
 
 def data_plot(x,y,z):
