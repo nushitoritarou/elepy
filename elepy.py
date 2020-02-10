@@ -4,12 +4,36 @@ from matplotlib import pyplot as plt
 
 
 x = np.arange(0,20,0.1)
-e = [np.sin(i) for i in x]
+e = [1 for i in x]
 
 
 
-def calc_RL(r,l,d):
-    pass
+def calc_RL(r,l):
+    i=[0 for i in x]
+    vl=[0 for i in x]
+    dt=0
+    for j,ele in enumerate(e):
+        i[j]=dt/l
+        Vr=r*i[j]
+        vl[j]=ele-Vr
+        before_d=dt
+        dt+=vl[j]
+        #print(f'i : {i[j]}   {vl[j]}    {before_d}')
+        di=dt
+        if abs(before_d)<abs((ele/r)*l) and abs(dt)>abs((ele/r)*l):
+            dt=(ele/r)*l
+            print(f'{j*0.1}sec ,dt = {dt} , before_d = {before_d} , dt = {di} , ele = {ele}')
+            
+        
+    fig,ax1 = plt.subplots()
+
+    ax1.plot(x,e,color='tab:orange',label='Volt')
+    ax2 = ax1.twinx()
+    ax2.plot(x,i,color='tab:green',label = 'anpare')
+    plt.title('RL')
+
+    plt.show()
+
 
 def calc_RC(r,c,q):
     # 抵抗とコンデンサの積が0 よりも小さすぎると電流がマイナスに発散することがある
@@ -46,7 +70,7 @@ def calc_RLC():
     pass
 
 if __name__=='__main__':
-    calc_RC(1,1,0)
+    calc_RL(10,100)
 
 
 def data_plot(x,y,z):
