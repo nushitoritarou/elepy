@@ -9,6 +9,7 @@ e = [1 for i in x]
 
 
 def calc_RL(r,l):
+    # 交流でLの値が小さい時変な感じになる
     i=[0 for i in x]
     vl=[0 for i in x]
     dt=0
